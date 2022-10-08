@@ -1,5 +1,5 @@
-//const BASE_URL = process.env.PUBLIC_URL;
-const BASE_URL = 'https://lldev.thespacedevs.com/2.2.0';
+const BASE_URL = process.env.REACT_APP_API_URL;
+// const BASE_URL = 'https://lldev.thespacedevs.com/2.2.0';
 
 const __apiCall = async (path, method, body) => {
 	let response, data, error;
@@ -28,4 +28,11 @@ const getLastLaunch = async () => {
 	return await __apiGetCall('/launch/previous?limit=1');
 };
 
-export { getLastLaunch };
+const getNextLaunch = async () => {
+	return await __apiGetCall('/launch/upcoming/?limit=1');
+};
+const getHistoryLaunch = async (limit) => {
+	return await __apiGetCall(`/launch/?limit=${limit}`);
+};
+
+export { getLastLaunch, getNextLaunch, getHistoryLaunch };

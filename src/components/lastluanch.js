@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 
-import './lastluanch.css';
+import { Spin } from 'antd';
 
-import { getLastLaunch } from './services/api';
+import '../assets/styles/lastluanch.css';
 
-export default function LastLuanch() {
+import { getLastLaunch } from '../services/api';
+
+
+export default function LastLuanch(setItem) {
 	const [loading, setLoading] = useState(true);
 	const [launchData, setLaunchData] = useState();
 	const [errorData, setErrorData] = useState();
@@ -18,12 +21,13 @@ export default function LastLuanch() {
 	};
 
 	useEffect(() => {
+		setItem.setItem('item-1')
 		fetchData();
 	}, []);
 
 	return (
 		<div>
-			{loading && <pre>loading</pre>}
+			{loading && <Spin/>}
 			{!!errorData && (
 				<code>
 					Error:
@@ -33,11 +37,15 @@ export default function LastLuanch() {
 			)}
 			{!loading && !errorData && !launchData && <div>No data</div>}
 			{!errorData && !!launchData && (
-				<pre>
-					Data:
-					<br />
-					{JSON.stringify(launchData, null, 2)}
-				</pre>
+				<>
+					<h2>{launchData.name}</h2>
+					
+					<pre>
+						Data:
+						<br />
+						{JSON.stringify(launchData, null, 2)}
+					</pre>
+				</>
 			)}
 		</div>
 	);

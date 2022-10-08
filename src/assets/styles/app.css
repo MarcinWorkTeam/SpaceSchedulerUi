@@ -1,0 +1,17 @@
+.header {
+	display: flex;
+}
+
+.header ul {
+	width: 100%;
+}
+
+.logo a {
+	color: #fff;
+	margin-right: 50px;
+	font-size: 20px;
+}
+
+.site-layout-background {
+	background: #fff;
+}
