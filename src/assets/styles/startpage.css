@@ -1,0 +1,33 @@
+.startpage {
+	display: flex;
+	justify-content: space-evenly;
+	align-items: center;
+	height: 500px;
+	width: 100%;
+}
+
+.startpage_info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    height: 100%;
+}
+
+.startpage_info h2 {
+    font-size: 35px;
+}
+
+.startpage_info p {
+    font-size: 20px;
+}
+
+.startpage_img {
+    width: 50%;
+    height: 100%;
+    background-image: url('https://cdn.pixabay.com/photo/2010/12/01/space-shuttle-774_960_720.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}

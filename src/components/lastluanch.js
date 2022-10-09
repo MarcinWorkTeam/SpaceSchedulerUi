@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 
-import { Spin } from 'antd';
-
-import '../assets/styles/lastluanch.css';
+import { Spin, Image } from 'antd';
 
 import { getLastLaunch } from '../services/api';
 
+import '../assets/styles/lastluanch.css';
 
 export default function LastLuanch(setItem) {
 	const [loading, setLoading] = useState(true);
@@ -21,13 +20,13 @@ export default function LastLuanch(setItem) {
 	};
 
 	useEffect(() => {
-		setItem.setItem('item-1')
+		setItem.setItem('item-1');
 		fetchData();
 	}, []);
 
 	return (
-		<div>
-			{loading && <Spin/>}
+		<div className='lastluanch'>
+			{loading && <Spin size='large' />}
 			{!!errorData && (
 				<code>
 					Error:
@@ -38,13 +37,45 @@ export default function LastLuanch(setItem) {
 			{!loading && !errorData && !launchData && <div>No data</div>}
 			{!errorData && !!launchData && (
 				<>
-					<h2>{launchData.name}</h2>
-					
-					<pre>
-						Data:
-						<br />
-						{JSON.stringify(launchData, null, 2)}
-					</pre>
+					<h1>{launchData.name}</h1>
+					<div className='lastluanch_box'>
+						<div className='lastluanch_box_info'>
+							
+							<h2>Nazwa misji</h2>
+							<p>{launchData ? launchData.name : null}</p>
+							
+							<h2>Data startu</h2>
+							<p>{launchData ? launchData.net : null}</p>
+
+							<h2>Rakieta</h2>
+							<p>Nazwa: {launchData ? launchData.rocket.configuration.full_name : null}</p>
+
+							<h2>Pad</h2>
+							<p>{launchData ? launchData.pad.name : null}</p>
+							
+							<h2>Pad</h2>
+							<p>{launchData ? launchData.pad.name : null}</p>
+							
+							<h2>Kod kraju</h2>
+							<p>{launchData ? launchData.pad.location.country_code : null}</p>
+							
+							<h2>Typ misji</h2>
+							<p>{launchData ? launchData.launch_service_provider.type : null}</p>
+							
+							<h2>Nazwa firmy?</h2>
+							<p>{launchData ? launchData.launch_service_provider.name : null}</p>
+							
+							<h2>Początek okna startowego</h2>
+							<p>{launchData ? launchData.window_start : null}</p>
+							
+							<h2>Koniec okna startowego</h2>
+							<p>{launchData ? launchData.window_end : null }</p>
+						</div>
+						<div className='lastluanch_box_img'>
+							<Image width={200} src={launchData.image} />
+						</div>
+					</div>
+					{console.log(launchData)}
 				</>
 			)}
 		</div>

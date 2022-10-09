@@ -1,5 +1,5 @@
-import React, { useState} from 'react';
-import { Routes, Route } from "react-router-dom";
+import React, { useState } from 'react';
+import { Routes, Route } from 'react-router-dom';
 import 'antd/dist/antd.css';
 import './assets/styles/app.css';
 import {
@@ -8,14 +8,16 @@ import {
 	UserOutlined,
 } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
-import { Breadcrumb, Layout, Menu } from 'antd';
+import { Breadcrumb, Layout, Menu, DatePicker, Space } from 'antd';
 
-import LastLuanch from './components/lastluanch'
-import NextLuanch from './components/nextluanch'
-import HistoryLuanch from './components/historyluanch'
-import StartPage from './components/startpage.js'
+import LastLuanch from './components/lastluanch';
+import NextLuanch from './components/nextluanch';
+import HistoryLuanch from './components/historyluanch';
+import StartPage from './components/startpage.js';
 
 const { Header, Content, Footer, Sider } = Layout;
+
+const { RangePicker } = DatePicker;
 
 const items2 = [UserOutlined, LaptopOutlined, NotificationOutlined].map(
 	(icon, index) => {
@@ -35,97 +37,87 @@ const items2 = [UserOutlined, LaptopOutlined, NotificationOutlined].map(
 	}
 );
 
-function  App() {
+function App() {
+	const [selectItem, setSelectItem] = useState('');
 
-	const [selectItem, setSelectItem] = useState('')
-
-	function  setItem(item) {
-		setSelectItem(item)
+	function setItem(item) {
+		setSelectItem(item);
 		if (item === 'item-1') {
-			document.title = "SpaceScheduler | Ostatni lot"
+			document.title = 'SpaceScheduler | Ostatni lot';
 		} else if (item === 'item-2') {
-			document.title = "SpaceScheduler | Następny lot"
+			document.title = 'SpaceScheduler | Następny lot';
 		} else if (item === 'item-3') {
-			document.title = "SpaceScheduler | Historia lotów"
+			document.title = 'SpaceScheduler | Historia lotów';
 		} else if (item === '') {
-			document.title = "SpaceScheduler | Home"
+			document.title = 'SpaceScheduler | Home';
 		}
-	}	
+	}
 
-	return(
-	<Layout>
-		<Header className='header'>
-			<div className='logo'>
-				<Link to='/'>SpaceScheduler</Link>
-			</div>
-			<Menu
-	theme='dark'
-	mode='horizontal'
-	selectedKeys={selectItem}
-	
-	items={[
-		{
-			label: <Link to='/last'>Ostatni lot</Link>,
-			key: 'item-1',
-		},
-		{
-			label: <Link to='/next'>Następny lot</Link>,
-			key: 'item-2'
-		},
-		{
-			label: <Link to='/history'>Historia lotów</Link>,
-			key: 'item-3'
-		},
-	]}
-/>;
-		</Header>
-		<Content
-			style={{
-				padding: '0 50px',
-			}}>
-			<Breadcrumb
+	return (
+		<Layout>
+			<Header className='header'>
+				<div className='logo'>
+					<Link to='/'>SpaceScheduler</Link>
+				</div>
+				<Menu
+					theme='dark'
+					mode='horizontal'
+					selectedKeys={selectItem}
+					items={[
+						{
+							label: <Link to='/last'>Ostatni lot</Link>,
+							key: 'item-1',
+						},
+						{
+							label: <Link to='/next'>Następny lot</Link>,
+							key: 'item-2',
+						},
+						{
+							label: <Link to='/history'>Historia lotów</Link>,
+							key: 'item-3',
+						},
+					]}
+				/>
+				;
+			</Header>
+			<Content
 				style={{
-					margin: '16px 0',
+					padding: '0 50px',
 				}}>
-			</Breadcrumb>
-			<Layout
-				className='site-layout-background'
-				style={{
-					padding: '24px 0',
-				}}>
-				<Sider className='site-layout-background' width={200}>
-					<Menu
-						mode='inline'
-						defaultSelectedKeys={['1']}
-						defaultOpenKeys={['sub1']}
-						style={{
-							height: '100%',
-						}}
-						items={items2}
-					/>
-				</Sider>
-				<Content className="example"
+				<Breadcrumb
 					style={{
-						padding: '0 24px',
-						minHeight: 280,
+						margin: '16px 0',
+					}}></Breadcrumb>
+				<Layout
+					className='site-layout-background'
+					style={{
+						padding: '24px 0',
 					}}>
-					<Routes>
-						<Route exact path='/' element={<StartPage setItem={setItem}/>} />
-						<Route path='/last' element={<LastLuanch setItem={setItem}/>} />
-						<Route path='/next' element={<NextLuanch setItem={setItem} /> } />
-						<Route path='/history' element={<HistoryLuanch setItem={setItem} />} />
-					</Routes>
-				</Content>
-			</Layout>
-		</Content>
-		<Footer
-			style={{
-				textAlign: 'center',
-			}}>
-			SpaceScheduler ©2022 Created by Radosław Brzeziński
-		</Footer>
-	</Layout>
-	)
+					<Content
+						style={{
+							padding: '0 24px',
+							minHeight: 280,
+						}}>
+						<Routes>
+							<Route exact path='/' element={<StartPage setItem={setItem} />} />
+							<Route path='/last' element={<LastLuanch setItem={setItem} />} />
+							<Route path='/next' element={<NextLuanch setItem={setItem} />} />
+							<Route
+								path='/history'
+								element={<HistoryLuanch setItem={setItem} />}
+							/>
+						</Routes>
+					</Content>
+				</Layout>
+			</Content>
+			<Footer
+				style={{
+					textAlign: 'center',
+				}}>
+				SpaceScheduler ©2022 Created by Radosław Brzeziński
+			</Footer>
+		</Layout>
+	);
 }
 
-export default App
+export default App;
