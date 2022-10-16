@@ -1,10 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+
+import Highlighter from 'react-highlight-words';
+
+import moment from 'moment';
 
 import { getHistoryLaunch } from '../services/api';
 
-import { Table, Spin, Drawer, DatePicker, Space, Layout } from 'antd';
+import {
+	Table,
+	Spin,
+	Drawer,
+	DatePicker,
+	Button,
+	Space,
+	Input,
+} from 'antd';
 
-const { Sider } = Layout;
+import { SearchOutlined } from '@ant-design/icons';
 
 export default function HistoryLunch(setItem) {
 	const [loading, setLoading] = useState(true);
@@ -14,6 +26,113 @@ export default function HistoryLunch(setItem) {
 	const [errorData, setErrorData] = useState();
 	const [open, setOpen] = useState(false);
 
+	const [searchText, setSearchText] = useState('');
+	const [searchedColumn, setSearchedColumn] = useState('');
+	const searchInput = useRef(null);
+
+	const time = (props) => {
+		const date = new Date(props);
+		return date.toLocaleString();
+	};
+
+	const handleSearch = (selectedKeys, confirm, dataIndex) => {
+		confirm();
+		setSearchText(selectedKeys[0]);
+		setSearchedColumn(dataIndex);
+	};
+	const handleReset = (clearFilters) => {
+		clearFilters();
+		setSearchText('');
+	};
+
+	const getColumnSearchProps = (dataIndex) => ({
+		filterDropdown: ({
+			setSelectedKeys,
+			selectedKeys,
+			confirm,
+			clearFilters,
+		}) => (
+			<div
+				style={{
+					padding: 8,
+				}}>
+				<Input
+					ref={searchInput}
+					placeholder={`Wpisz nazwę`}
+					value={selectedKeys[0]}
+					onChange={(e) =>
+						setSelectedKeys(e.target.value ? [e.target.value] : [])
+					}
+					onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
+					style={{
+						marginBottom: 8,
+						display: 'block',
+					}}
+				/>
+				<Space>
+					<Button
+						type='primary'
+						onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
+						icon={<SearchOutlined />}
+						size='small'
+						style={{
+							width: 90,
+						}}>
+						Szukaj
+					</Button>
+					<Button
+						onClick={() => clearFilters && handleReset(clearFilters)}
+						size='small'
+						style={{
+							width: 90,
+						}}>
+						Reset
+					</Button>
+					<Button
+						type='link'
+						size='small'
+						onClick={() => {
+							confirm({
+								closeDropdown: false,
+							});
+							setSearchText(selectedKeys[0]);
+							setSearchedColumn(dataIndex);
+						}}>
+						Filter
+					</Button>
+				</Space>
+			</div>
+		),
+		filterIcon: (filtered) => (
+			<SearchOutlined
+				style={{
+					color: filtered ? '#1890ff' : undefined,
+				}}
+			/>
+		),
+		onFilter: (value, record) =>
+			record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
+		onFilterDropdownOpenChange: (visible) => {
+			if (visible) {
+				setTimeout(() => searchInput.current?.select(), 100);
+			}
+		},
+		render: (text) =>
+			searchedColumn === dataIndex ? (
+				<Highlighter
+					highlightStyle={{
+						backgroundColor: '#ffc069',
+						padding: 0,
+					}}
+					searchWords={[searchText]}
+					autoEscape
+					textToHighlight={text ? text.toString() : ''}
+				/>
+			) : (
+				text
+			),
+	});
+
 	useEffect(() => {
 		setItem.setItem('item-3');
 		fetchData();
@@ -22,7 +141,7 @@ export default function HistoryLunch(setItem) {
 	const { RangePicker } = DatePicker;
 
 	const showDrawer = (e) => {
-		setLaunchData2(launchData1[e.key]);
+		setLaunchData2(launchData1[e.key])
 		setOpen(true);
 	};
 
@@ -32,7 +151,7 @@ export default function HistoryLunch(setItem) {
 
 	const fetchData = async () => {
 		setLoading(true);
-		const [data, error] = await getHistoryLaunch(11);
+		const [data, error] = await getHistoryLaunch(50);
 		setLaunchData(data?.results);
 		setLaunchData1(data?.results);
 		processingData(data?.results);
@@ -58,16 +177,20 @@ export default function HistoryLunch(setItem) {
 			title: 'Nazwa misji',
 			dataIndex: 'name',
 			key: 'name',
+			...getColumnSearchProps('name'),
 		},
 		{
 			title: 'Data startu',
 			dataIndex: 'launchdate',
 			key: 'launchdate',
+			sorter: (a, b) =>
+				moment(a.launchdate).unix() - moment(b.launchdate).unix(),
 		},
 		{
 			title: 'Miejsce startu',
 			dataIndex: 'location',
 			key: 'location',
+			...getColumnSearchProps('location'),
 		},
 	];
 
@@ -109,13 +232,6 @@ export default function HistoryLunch(setItem) {
 			{!loading && !errorData && !launchData && <div>No data</div>}
 			{!loading && !errorData && !!launchData && (
 				<>
-					<Sider className='site-layout-background' width={200}>
-						<p>Wyszukaj po zakresie dat</p>
-						<Space direction='vertical' size={12}>
-							<RangePicker />
-						</Space>
-					</Sider>
-
 					<Table columns={columns} dataSource={launchData} />
 				</>
 			)}
@@ -124,17 +240,25 @@ export default function HistoryLunch(setItem) {
 				title='Szczególy misji'
 				placement='right'
 				onClose={onClose}
-				open={open}>
+				open={open}
+				width='50%'>
 				<h2>Nazwa misji</h2>
 				<p>{launchData2 ? launchData2.mission.name : null}</p>
 				<h2>Data startu</h2>
-				<p>{launchData2 ? launchData2.net : null}</p>
+				<p>{launchData2 ? time(launchData2.net) : null}</p>
+				<h2>Opis</h2>
+				<p>{launchData2 ? launchData2.mission.description : null}</p>
 				<h2>Rakieta</h2>
 				<p>{launchData2 ? launchData2.rocket.configuration.full_name : null}</p>
 				<h2>Pad</h2>
 				<p>{launchData2 ? launchData2.pad.name : null}</p>
 				<h2>Status</h2>
 				<p>{launchData2 ? launchData2.status.name : null}</p>
+				<h2>Orbita</h2>
+				<p>{launchData2 ? launchData2.mission.orbit.name : null}</p>
+				<img style={{width: '100%'}} src={launchData2 ? launchData2.pad.map_image : null}></img>
+
+				
 			</Drawer>
 		</div>
 	);

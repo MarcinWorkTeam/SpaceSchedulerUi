@@ -11,7 +11,6 @@ const __apiCall = async (path, method, body) => {
 			},
 			body: JSON.stringify(body),
 		});
-		console.log(response);
 		data = await response.json();
 	} catch (ex) {
 		error = 'Api returns error status code: ' + response.status;

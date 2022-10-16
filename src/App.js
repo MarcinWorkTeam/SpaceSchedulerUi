@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import 'antd/dist/antd.css';
+import 'antd/dist/antd.min.css';
 import './assets/styles/app.css';
 import {
 	LaptopOutlined,
@@ -17,7 +17,6 @@ import StartPage from './components/startpage.js';
 
 const { Header, Content, Footer, Sider } = Layout;
 
-const { RangePicker } = DatePicker;
 
 const items2 = [UserOutlined, LaptopOutlined, NotificationOutlined].map(
 	(icon, index) => {
@@ -56,10 +55,12 @@ function App() {
 	return (
 		<Layout>
 			<Header className='header'>
+				<div className='wrapper'>
 				<div className='logo'>
 					<Link to='/'>SpaceScheduler</Link>
 				</div>
-				<Menu
+				
+				<Menu 
 					theme='dark'
 					mode='horizontal'
 					selectedKeys={selectItem}
@@ -78,10 +79,14 @@ function App() {
 						},
 					]}
 				/>
-				;
+				</div>
+				
 			</Header>
 			<Content
 				style={{
+					maxWidth: '1444px',
+					width: '100%',
+					margin: '0 auto',
 					padding: '0 50px',
 				}}>
 				<Breadcrumb
@@ -114,7 +119,7 @@ function App() {
 				style={{
 					textAlign: 'center',
 				}}>
-				SpaceScheduler ©2022 Created by Radosław Brzeziński
+				SpaceScheduler ©{new Date().getFullYear()} Created by Radosław Brzeziński
 			</Footer>
 		</Layout>
 	);
