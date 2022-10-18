@@ -8,6 +8,8 @@ import { Spin, Button } from 'antd';
 
 import '../assets/styles/startpage.css';
 
+import {FormattedMessage} from 'react-intl';
+
 export default function StartPage(setItem) {
 	const [loading, setLoading] = useState(true);
 	const [launchData, setLaunchData] = useState();
@@ -53,10 +55,10 @@ export default function StartPage(setItem) {
 			{!errorData && !!launchData && (
 				<div className='startpage'>
 					<div className='startpage_shadow'><div className='startpage_info'>
-						<h2>Nastęny lot: {launchData.name}</h2>
+						<h2><FormattedMessage id ="app.startpage"/> {launchData.name}</h2>
 						<p>{time()}</p>
 						<Button size='large' type='primary'>
-							<Link to='/next'>Zobacz szczegóły</Link>
+							<Link to='/next'><FormattedMessage id ="app.startpage.button"/></Link>
 						</Button>
 					</div></div>
 				</div>

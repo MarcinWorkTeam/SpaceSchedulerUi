@@ -1,43 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import 'antd/dist/antd.min.css';
 import './assets/styles/app.css';
-import {
-	LaptopOutlined,
-	NotificationOutlined,
-	UserOutlined,
-} from '@ant-design/icons';
+
 import { Link } from 'react-router-dom';
-import { Breadcrumb, Layout, Menu, DatePicker, Space } from 'antd';
+import { Breadcrumb, Layout, Menu } from 'antd';
 
 import LastLuanch from './components/lastluanch';
 import NextLuanch from './components/nextluanch';
 import HistoryLuanch from './components/historyluanch';
 import StartPage from './components/startpage.js';
 
-const { Header, Content, Footer, Sider } = Layout;
+import { FormattedMessage } from 'react-intl';
+import { Context } from './components/wrapper';
 
-
-const items2 = [UserOutlined, LaptopOutlined, NotificationOutlined].map(
-	(icon, index) => {
-		const key = String(index + 1);
-		return {
-			key: `sub${key}`,
-			icon: React.createElement(icon),
-			label: `subnav ${key}`,
-			children: new Array(4).fill(null).map((_, j) => {
-				const subKey = index * 4 + j + 1;
-				return {
-					key: subKey,
-					label: `option${subKey}`,
-				};
-			}),
-		};
-	}
-);
+const { Header, Content, Footer } = Layout;
 
 function App() {
 	const [selectItem, setSelectItem] = useState('');
+	const context = useContext(Context);
 
 	function setItem(item) {
 		setSelectItem(item);
@@ -56,31 +37,48 @@ function App() {
 		<Layout>
 			<Header className='header'>
 				<div className='wrapper'>
-				<div className='logo'>
-					<Link to='/'>SpaceScheduler</Link>
+					<div className='logo'>
+						<Link to='/'>SpaceScheduler</Link>
+					</div>
+
+					<Menu
+						theme='dark'
+						mode='horizontal'
+						selectedKeys={selectItem}
+						items={[
+							{
+								label: (
+									<Link to='/last'>
+										<FormattedMessage id='navItem1' />
+									</Link>
+								),
+								key: 'item-1',
+							},
+							{
+								label: (
+									<Link to='/next'>
+										<FormattedMessage id='navItem2' />
+									</Link>
+								),
+								key: 'item-2',
+							},
+							{
+								label: (
+									<Link to='/history'>
+										<FormattedMessage id='navItem3' />
+									</Link>
+								),
+								key: 'item-3',
+							},
+						]}
+					/>
+
+<select value = {context.locale} onChange={context.selectLanguage}>
+         <option value= 'en-EN'>English</option>
+         <option value= 'pl-PL'>Polish</option>
+       </select>
+
 				</div>
-				
-				<Menu 
-					theme='dark'
-					mode='horizontal'
-					selectedKeys={selectItem}
-					items={[
-						{
-							label: <Link to='/last'>Ostatni lot</Link>,
-							key: 'item-1',
-						},
-						{
-							label: <Link to='/next'>Następny lot</Link>,
-							key: 'item-2',
-						},
-						{
-							label: <Link to='/history'>Historia lotów</Link>,
-							key: 'item-3',
-						},
-					]}
-				/>
-				</div>
-				
 			</Header>
 			<Content
 				style={{
@@ -119,7 +117,8 @@ function App() {
 				style={{
 					textAlign: 'center',
 				}}>
-				SpaceScheduler ©{new Date().getFullYear()} Created by Radosław Brzeziński
+				SpaceScheduler ©{new Date().getFullYear()} Created by Radosław
+				Brzeziński
 			</Footer>
 		</Layout>
 	);

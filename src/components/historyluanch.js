@@ -6,6 +6,8 @@ import moment from 'moment';
 
 import { getHistoryLaunch } from '../services/api';
 
+import {FormattedMessage} from 'react-intl';
+
 import {
 	Table,
 	Spin,
@@ -58,7 +60,6 @@ export default function HistoryLunch(setItem) {
 				}}>
 				<Input
 					ref={searchInput}
-					placeholder={`Wpisz nazwę`}
 					value={selectedKeys[0]}
 					onChange={(e) =>
 						setSelectedKeys(e.target.value ? [e.target.value] : [])
@@ -78,7 +79,7 @@ export default function HistoryLunch(setItem) {
 						style={{
 							width: 90,
 						}}>
-						Szukaj
+							<FormattedMessage id ="app.launchhistory.serch"/>
 					</Button>
 					<Button
 						onClick={() => clearFilters && handleReset(clearFilters)}
@@ -161,7 +162,7 @@ export default function HistoryLunch(setItem) {
 
 	const columns = [
 		{
-			title: 'Akcja',
+			title: <FormattedMessage id ="app.launchhistory.action"/>,
 			dataIndex: '',
 			key: 'x',
 			render: (e) => (
@@ -169,25 +170,25 @@ export default function HistoryLunch(setItem) {
 					onClick={() => {
 						showDrawer(e);
 					}}>
-					Szczegóły
+					<FormattedMessage id ="app.launchhistory.details"/>
 				</a>
 			),
 		},
 		{
-			title: 'Nazwa misji',
+			title: <FormattedMessage id ="app.launchhistory.missionname"/>,
 			dataIndex: 'name',
 			key: 'name',
 			...getColumnSearchProps('name'),
 		},
 		{
-			title: 'Data startu',
+			title: <FormattedMessage id ="app.launchhistory.launchdate"/>,
 			dataIndex: 'launchdate',
 			key: 'launchdate',
 			sorter: (a, b) =>
 				moment(a.launchdate).unix() - moment(b.launchdate).unix(),
 		},
 		{
-			title: 'Miejsce startu',
+			title: <FormattedMessage id ="app.launchhistory.launchsite"/>,
 			dataIndex: 'location',
 			key: 'location',
 			...getColumnSearchProps('location'),
@@ -242,20 +243,21 @@ export default function HistoryLunch(setItem) {
 				onClose={onClose}
 				open={open}
 				width='50%'>
-				<h2>Nazwa misji</h2>
+				<h2><FormattedMessage id ="app.launchhistory.drawer.missionname"/></h2>
 				<p>{launchData2 ? launchData2.mission.name : null}</p>
-				<h2>Data startu</h2>
+				<h2><FormattedMessage id ="app.launchhistory.drawer.launchdate"/></h2>
 				<p>{launchData2 ? time(launchData2.net) : null}</p>
-				<h2>Opis</h2>
+				<h2><FormattedMessage id ="app.launchhistory.drawer.description"/></h2>
 				<p>{launchData2 ? launchData2.mission.description : null}</p>
-				<h2>Rakieta</h2>
+				<h2><FormattedMessage id ="app.launchhistory.drawer.rocket"/></h2>
 				<p>{launchData2 ? launchData2.rocket.configuration.full_name : null}</p>
-				<h2>Pad</h2>
+				<h2><FormattedMessage id ="app.launchhistory.drawer.pad"/></h2>
 				<p>{launchData2 ? launchData2.pad.name : null}</p>
-				<h2>Status</h2>
+				<h2><FormattedMessage id ="app.launchhistory.drawer.status"/></h2>
 				<p>{launchData2 ? launchData2.status.name : null}</p>
-				<h2>Orbita</h2>
+				<h2><FormattedMessage id ="app.launchhistory.drawer.orbit"/></h2>
 				<p>{launchData2 ? launchData2.mission.orbit.name : null}</p>
+				<h2><FormattedMessage id ="app.launchhistory.drawer.photo"/></h2>
 				<img style={{width: '100%'}} src={launchData2 ? launchData2.pad.map_image : null}></img>
 
 				
