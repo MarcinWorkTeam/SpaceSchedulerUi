@@ -10,9 +10,12 @@ import {
 	Button,
 	Space,
 	Input,
+	Typography
 } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import Error from './error'
+
+const { Link } = Typography;
 
 export default function HistoryLunch(setItem) {
 	const [loading, setLoading] = useState(true);
@@ -132,6 +135,17 @@ export default function HistoryLunch(setItem) {
 		setItem.setItem('item-3');
 		fetchData();
 	}, []);
+	
+	const fetchData = async () => {
+		setLoading(true);
+		const [data, error] = await getHistoryLaunch(50);
+		setLaunchData(data?.results);
+		setlaunchDataFull(data?.results);
+		processingData(data?.results);
+		setErrorData(error);
+		setLoading(false);
+	};
+	
 
 	const showDrawer = (e) => {
 		setlaunchDataDrawer(launchDataFull[e.key])
@@ -142,15 +156,6 @@ export default function HistoryLunch(setItem) {
 		setOpen(false);
 	};
 
-	const fetchData = async () => {
-		setLoading(true);
-		const [data, error] = await getHistoryLaunch(50);
-		setLaunchData(data?.results);
-		setlaunchDataFull(data?.results);
-		processingData(data?.results);
-		setErrorData(error);
-		setLoading(false);
-	};
 
 	const columns = [
 		{
@@ -158,12 +163,13 @@ export default function HistoryLunch(setItem) {
 			dataIndex: '',
 			key: 'x',
 			render: (e) => (
-				<a
+				<Link
+				target="_blank"
 					onClick={() => {
 						showDrawer(e);
 					}}>
 					<FormattedMessage id ="app.launchhistory.details"/>
-				</a>
+				</Link>
 			),
 		},
 		{
@@ -246,7 +252,7 @@ export default function HistoryLunch(setItem) {
 				<h2><FormattedMessage id ="app.launchhistory.drawer.orbit"/></h2>
 				<p>{launchDataDrawer ? launchDataDrawer.mission.orbit.name : null}</p>
 				<h2><FormattedMessage id ="app.launchhistory.drawer.photo"/></h2>
-				<img style={{width: '100%'}} src={launchDataDrawer ? launchDataDrawer.pad.map_image : null}></img>
+				<img alt='Launch pad map' style={{width: '100%'}} src={launchDataDrawer ? launchDataDrawer.pad.map_image : null}></img>
 			</Drawer>
 		</div>
 	);

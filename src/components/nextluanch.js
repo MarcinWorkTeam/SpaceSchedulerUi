@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { getNextLaunch } from '../services/api';
-import { Typography, Spin } from 'antd';
+import { Spin } from 'antd';
 import ShowData from './showdata';
 import Error from './error'
 
