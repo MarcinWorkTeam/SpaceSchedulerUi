@@ -1,8 +1,6 @@
 import { Image } from 'antd';
-
-import '../assets/styles/showdata.css';
-
 import {FormattedMessage} from 'react-intl';
+import '../assets/styles/showdata.css';
 
 export default function ShowData(props) {
 
