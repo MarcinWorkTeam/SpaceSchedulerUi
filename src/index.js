@@ -7,7 +7,7 @@ import Wrapper from "./components/wrapper";
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
 	<Wrapper>
-		<BrowserRouter>
+		<BrowserRouter basename='/SpaceSchedulerUi'>
 			<App />
 		</BrowserRouter>
 	</Wrapper>

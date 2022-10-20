@@ -55,8 +55,9 @@ export default function ShowData(props) {
 						<p>{props.launchData ? time(props.launchData.window_end) : null}</p>
 					</div>
 					<div className='showdata_box_img'>
-						<Image width={500} src={props.launchData.image} />
-						<Image width={500} src={props.launchData.pad.map_image} />
+						<Image src={props.launchData.image} />
+						<div style={{paddingBottom: '40px'}}></div>
+						<Image  src={props.launchData.pad.map_image} />
 						
 					</div>
 				</div>
